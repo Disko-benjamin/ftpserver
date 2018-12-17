@@ -187,7 +187,7 @@ public class FtpClient {
                     fileContent = new byte[fileSize];
                     //read file bytes and store them in fileContent byte[]
                     reader.readFully(fileContent, 0, fileSize);
-                    String fileName = request.substring(request.lastIndexOf("/") + 1, request.length());
+                    String fileName = arg.substring(request.lastIndexOf("/") + 1, request.length());
                     FileOutputStream fileWriter = new FileOutputStream(new File(fileName));
                     fileWriter.write(fileContent, 0, fileContent.length);
                     fileWriter.close();
