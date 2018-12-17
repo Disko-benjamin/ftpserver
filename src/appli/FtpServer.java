@@ -33,14 +33,14 @@ public class FtpServer {
         writer.flush();
 
         String username = reader.readUTF();
-        username = parseLine(username.substring(5, username.length()));
+        username = username.substring(5, username.length()).replaceAll("(\\r|\\n)", "");
         System.out.println("Username: " + username);
 
         writer.writeUTF("331\r\n");
         writer.flush();
 
         String password = reader.readUTF();
-        password = parseLine(password.substring(5, password.length()));
+        password = password.substring(5, password.length()).replaceAll("(\\r|\\n)", "");
         System.out.println("Password: " + password);
 
         if (!username.equals("ffctlr") || !password.equals("rsx_2018")) {
@@ -77,7 +77,7 @@ public class FtpServer {
 
                 if (request.indexOf(" ") != -1) {
                     cmd = request.substring(0, request.indexOf(" "));
-                    arg = parseLine(request.substring(request.indexOf(" ") + 1, request.length()));
+                    arg = request.substring(request.indexOf(" ") + 1, request.length()).replaceAll("(\\r|\\n)", "");
                 }
 
                 switch (cmd) {
@@ -95,7 +95,7 @@ public class FtpServer {
                         byte[] fileContent = new byte[fileSize];
                         //read file bytes and store them in fileContent byte[]
                         reader.readFully(fileContent, 0, fileSize);
-                        String fileName = parseLine(request.substring(request.lastIndexOf("/") + 1, request.length()));
+                        String fileName = request.substring(request.lastIndexOf("/") + 1, request.length()).replaceAll("(\\r|\\n)", "");
                         FileOutputStream fileWriter = new FileOutputStream(new File(fileName));
                         fileWriter.write(fileContent, 0, fileContent.length);
                         fileWriter.close();
@@ -121,7 +121,7 @@ public class FtpServer {
                         writer.flush();
                         writer.write(fileContent, 0, fileContent.length);
                         writer.flush();
-                        System.out.println("File " + request.substring(request.lastIndexOf("/") + 1, parseLine(request.length())) + " has been sent!");
+                        System.out.println("File " + request.substring(request.lastIndexOf("/") + 1, request.length()).replaceAll("(\\r|\\n)", "") + " has been sent!");
                         break;
 
 
@@ -146,10 +146,6 @@ public class FtpServer {
     public static void main(String args[]) throws Exception {
         System.out.println("***FTP SERVER RUNNING ON PORT N°12345***\n");
         run();
-    }
-
-    public static String parseLine(String l) {
-        return l.replaceAll("(\\r|\\n)", "");
     }
 
 }
